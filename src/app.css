@@ -1,0 +1,115 @@
+@import "@fontsource-variable/inter";
+
+:root {
+  color-scheme: light dark;
+  --text: light-dark(#0f1419, #f1f3f7);
+  --muted: light-dark(#5b6676, #98a2b3);
+  --faint: light-dark(#8a94a3, #6b7585);
+  --page: light-dark(#f6f7f9, #0b0d11);
+  --surface: light-dark(#ffffff, #14171d);
+  --raised: light-dark(#f2f4f7, #1b1f27);
+  --border: light-dark(#e4e7ec, #232831);
+  --border-strong: light-dark(#cfd4dc, #343a46);
+  --accent: light-dark(#004884, #7ab8f5);
+  --accent-soft: light-dark(#e6eff8, #17283b);
+  --good: light-dark(#0e7a43, #47c28a);
+  --good-soft: light-dark(#e3f4eb, #12291f);
+  --warn: light-dark(#a15c00, #e5a94b);
+  --warn-soft: light-dark(#fbf0dc, #2e2412);
+  --bad: light-dark(#c4292c, #f2726f);
+  --bad-soft: light-dark(#fbe7e7, #331a1b);
+  --shadow: light-dark(0 1px 2px rgb(16 24 40 / 5%), 0 1px 2px rgb(0 0 0 / 40%));
+  --shadow-up: light-dark(0 6px 18px rgb(16 24 40 / 9%), 0 6px 18px rgb(0 0 0 / 50%));
+  --radius: 12px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font: 14px/1.5 "Inter Variable", system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01", "tnum";
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.cut {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.12s,
+    color 0.12s,
+    background 0.12s;
+}
+.action:hover {
+  border-color: var(--border-strong);
+  background: var(--raised);
+  color: var(--text);
+}
+
+.section {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 2.25rem 0 0.75rem;
+}
+.section h2 {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.section a {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+.section a:hover {
+  color: var(--text);
+}
