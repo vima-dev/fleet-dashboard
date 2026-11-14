@@ -7,6 +7,9 @@
   let { history, days = false }: { history: History; days?: boolean } = $props();
   let hovered = $state<{ i: number; left: number } | null>(null);
 
+  // below this share of a piece, downtime is a missed scrape or a reboot, not an outage
+  const MIN_DOWN = 0.01;
+
   const startOf = (i: number) => history.start + i * history.piece;
   const groups = $derived.by(() => {
     const result: { day: string; pieces: number[] }[] = [];
@@ -20,12 +23,12 @@
 
   const stateOf = (i: number) => {
     const share = history.shares[i];
-    return share == null ? "none" : share > 0.999 ? "up" : "out";
+    return share == null ? "none" : 1 - share < MIN_DOWN ? "up" : "out";
   };
 
   const label = (i: number) => {
     const share = history.shares[i];
-    const what = share == null ? "No data" : share > 0.999 ? "Up" : `Down ${percent(1 - share)} of the time`;
+    const what = share == null ? "No data" : 1 - share < MIN_DOWN ? "Up" : `Down ${percent(1 - share)} of the time`;
     return { when: `${clock(startOf(i), true)} – ${clock(startOf(i) + history.piece, false)}`, what };
   };
 
