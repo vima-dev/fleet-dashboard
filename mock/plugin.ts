@@ -60,7 +60,7 @@ const scenarios: Record<string, Scenario> = {
       ["mail", 110, 1],
       ["mail", 62, 3],
     ],
-    unbuilt: ["old-desktop"],
+    unbuilt: ["old-desktop", "workstation"],
   },
   unbuilt: { builderBehind: 1 },
 };

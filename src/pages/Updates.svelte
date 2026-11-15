@@ -13,9 +13,9 @@
   let open = $state<Record<number, boolean>>({});
 
   const servers = $derived(fleet.hosts.filter((host) => host.alwaysOn));
-  const current = $derived(servers.filter((host) => host.version.state === "current").length);
+  const current = $derived(servers.filter((host) => host.position === 0).length);
   const personal = $derived(fleet.hosts.filter((host) => !host.alwaysOn));
-  const personalCurrent = $derived(personal.filter((host) => host.version.state === "current").length);
+  const personalCurrent = $derived(personal.filter((host) => host.position === 0).length);
   const shown = $derived(
     fleet.hosts.filter((host) => group === "All" || host.alwaysOn === (group === "Servers")),
   );

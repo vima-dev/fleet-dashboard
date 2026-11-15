@@ -102,13 +102,13 @@
     <Chart title="Disk" points={load?.disk ?? []} withDay={seconds > 86400} />
   </div>
 
-  {#if host.version.state === "behind"}
+  {#if host.version.state === "behind" && host.position != null}
     <div class="section">
       <h2>{count(host.version.by, "commit")} behind</h2>
       <button class="action" onclick={() => (missing = !missing)}>{missing ? "Hide" : "Show"}</button>
     </div>
     {#if missing}
-      <div class="card pad"><Commits commits={fleet.commits.slice(0, host.version.by)} now={fleet.now} repository={fleet.repository} /></div>
+      <div class="card pad"><Commits commits={fleet.commits.slice(host.position - host.version.by, host.position)} now={fleet.now} repository={fleet.repository} /></div>
     {/if}
   {/if}
 

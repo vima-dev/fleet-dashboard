@@ -27,10 +27,14 @@ export type History = { start: number; piece: number; shares: (number | null)[] 
 
 export type Version =
   | { state: "unknown" }
+  /** runs the commit built for it, which is the newest of main unless the build is missing */
   | { state: "current"; edited: boolean }
   /** running a commit that isn't on main */
   | { state: "apart"; edited: boolean; rev: string }
-  | { state: "behind"; edited: boolean; by: number; since: number; late: boolean };
+  /** commits behind the one built for it */
+  | { state: "behind"; edited: boolean; by: number; since: number; late: boolean }
+  /** runs a newer commit than the one built for it, so it was built by hand */
+  | { state: "ahead"; edited: boolean; by: number };
 
 export type Problem = { what: string; detail?: string; since?: number; host?: string };
 
@@ -140,6 +144,9 @@ export const load = async (): Promise<Fleet> => {
     ...config.public.map((site) => ({ title: site.name, url: `https://${site.name}`, on: site.on, check: site.name })),
   ].map(({ check, ...site }) => ({ ...site, up: answers.get(check), history: siteWeek.get(check) }));
 
+  // what each host would get by upgrading: the commit built for it, or main if that isn't known
+  const target = new Map(offered.map((s) => [s.metric.host, position.get(s.metric.rev) ?? 0]));
+
   const version = (name: string, alwaysOn: boolean): [Version, number | undefined] => {
     const rev = running.get(name)?.rev;
     if (!rev) return [{ state: "unknown" }, undefined];
@@ -147,11 +154,13 @@ export const load = async (): Promise<Fleet> => {
     const edited = rev !== commit;
     const at = position.get(commit);
     if (at == null) return [{ state: "apart", edited, rev: commit }, undefined];
-    if (at === 0) return [{ state: "current", edited }, 0];
+    const built = target.get(name) ?? 0;
+    if (at === built) return [{ state: "current", edited }, at];
+    if (at < built) return [{ state: "ahead", edited, by: built - at }, at];
     // time of the oldest missing commit
     const since = commits[at - 1].time;
     // servers upgrade nightly, so more than a day behind is a problem
-    return [{ state: "behind", edited, by: at, since, late: alwaysOn && now - since > DAY }, at];
+    return [{ state: "behind", edited, by: at - built, since, late: alwaysOn && now - since > DAY }, at];
   };
 
   const hosts: Host[] = up

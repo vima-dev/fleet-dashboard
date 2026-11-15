@@ -15,7 +15,7 @@
   const personal = $derived(sorted.filter((host) => !host.alwaysOn));
   const fine = $derived(fleet.problems.length === 0);
   const newest = $derived(fleet.commits[0]);
-  const current = $derived(servers.filter((host) => host.version.state === "current").length);
+  const current = $derived(servers.filter((host) => host.position === 0).length);
 </script>
 
 <section class="hero" class:fine>
