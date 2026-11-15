@@ -148,6 +148,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: auto;
   }
@@ -155,6 +156,7 @@
     position: relative;
     z-index: 1;
     display: flex;
+    flex-wrap: wrap;
     gap: 0.35rem;
   }
 </style>
