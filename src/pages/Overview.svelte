@@ -3,11 +3,12 @@
   import Icon from "../components/Icon.svelte";
   import Pill from "../components/Pill.svelte";
   import Uptime from "../components/Uptime.svelte";
-  import type { Fleet } from "../lib/fleet";
+  import type { Fleet, Site } from "../lib/fleet";
   import { ago, count, span } from "../lib/format";
   import { hostPath } from "../lib/state.svelte";
 
   let { fleet }: { fleet: Fleet } = $props();
+  const about = (site: Site) => `${site.description ?? "Public"}${site.on ? ` · on ${site.on}` : ""}`;
 
   const sorted = $derived([...fleet.hosts].sort((a, b) => Number(b.problems.length > 0) - Number(a.problems.length > 0)));
   const servers = $derived(sorted.filter((host) => host.alwaysOn));
@@ -28,7 +29,7 @@
       <svelte:element this={problem.host ? "a" : "div"} class="problem" href={problem.host && hostPath(problem.host)}>
         <span class="x"><Icon name="x" size={14} /></span>
         {#if problem.host}<b>{problem.host}</b>{/if}
-        <span class="what cut">{problem.what}{#if problem.detail}<span class="muted">&nbsp;· {problem.detail}</span>{/if}</span>
+        <span class="what cut" title={problem.detail ? `${problem.what} · ${problem.detail}` : problem.what}>{problem.what}{#if problem.detail}<span class="muted">&nbsp;· {problem.detail}</span>{/if}</span>
         {#if problem.since}<span class="muted">{span(fleet.now - problem.since)}</span>{/if}
         {#if problem.host}<span class="go"><Icon name="arrow" size={15} /></span>{/if}
       </svelte:element>
@@ -74,8 +75,8 @@
   {#each fleet.sites as site (site.url)}
     <a class="site" href={site.url} target="_blank" rel="noreferrer">
       <div class="name">
-        <h3 class="cut">{site.title}<Icon name="out" size={13} /></h3>
-        <p class="muted cut">{site.description ?? "Public"}{site.on ? ` · on ${site.on}` : ""}</p>
+        <h3 class="cut" title={site.title}>{site.title}<Icon name="out" size={13} /></h3>
+        <p class="muted cut" title={about(site)}>{about(site)}</p>
       </div>
       <div class="bars">
         {#if site.history}<Uptime history={site.history} />{/if}

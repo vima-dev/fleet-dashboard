@@ -65,7 +65,7 @@
         <b>Not yet</b>
       {:else if fleet.unbuilt.length}
         <b>{fleet.buildable - fleet.unbuilt.length} of {count(fleet.buildable, "host")}</b>
-        <span class="muted cut">Missing: {fleet.unbuilt.join(", ")}</span>
+        <span class="muted cut" title={fleet.unbuilt.join(", ")}>Missing: {fleet.unbuilt.join(", ")}</span>
       {:else}
         <b class="good"><Icon name="check" />Every host</b>
       {/if}

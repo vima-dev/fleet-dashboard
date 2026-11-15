@@ -18,10 +18,14 @@
         ? `Last seen ${ago(now - host.seen)}`
         : "Never seen",
   );
+  // the cover lies over the text, so it carries what the card may cut short
+  const hover = $derived(
+    [host.name, ...host.problems.map((p) => (p.detail ? `${p.what} ${p.detail}` : p.what))].join("\n"),
+  );
 </script>
 
 <article class="card" class:wrong={host.problems.length > 0} class:off={!host.online && !host.down}>
-  <a class="cover" href={hostPath(host.name)} aria-label={host.name}></a>
+  <a class="cover" href={hostPath(host.name)} aria-label={host.name} title={hover}></a>
   <div class="top">
     <span class="kind"><Icon name={host.kind} size={18} /></span>
     <div class="who">
