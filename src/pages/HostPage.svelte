@@ -3,6 +3,7 @@
   import Commits from "../components/Commits.svelte";
   import Icon from "../components/Icon.svelte";
   import Pill from "../components/Pill.svelte";
+  import Power from "../components/Power.svelte";
   import Uptime from "../components/Uptime.svelte";
   import VersionPill from "../components/VersionPill.svelte";
   import { hourly, usage, type Fleet, type History, type Points } from "../lib/fleet";
@@ -65,6 +66,7 @@
       </p>
     </div>
     <div class="links">
+      {#if host.power}{#key host.name}<Power {host} />{/key}{/if}
       {#each host.links as link}
         <a class="action" href={link.url} target="_blank" rel="noreferrer">{link.title}<Icon name="out" size={13} /></a>
       {/each}

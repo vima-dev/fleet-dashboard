@@ -189,6 +189,7 @@ const config = {
       host,
       {
         kind: h.kind,
+        power: h.kind === "desktop",
         links: [
           { title: "Graphs", url: `https://graphs.example.com/host/${host}` },
           ...(h.kind === "server" && host !== "router" ? [{ title: "Console", url: `https://console.example.com/${host}` }] : []),
@@ -228,6 +229,13 @@ export const sample = (): Plugin => ({
         }),
         "/api/v1/alerts": () => ({ data: { alerts: alerts(now) } }),
       };
+      const power = url.pathname.match(/^\/power\/([^/]+)\/(on|off)$/);
+      if (power && request.method === "POST" && hosts[power[1]]) {
+        // a host takes a while to boot or shut down
+        setTimeout(() => Object.assign(hosts[power[1]], { online: power[2] === "on", seen: 0, booted: 0 }), 8000);
+        response.statusCode = 204;
+        return response.end();
+      }
       const answer = answers[url.pathname];
       if (!answer) return next();
       response.setHeader("Content-Type", "application/json");

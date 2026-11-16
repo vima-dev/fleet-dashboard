@@ -6,7 +6,7 @@ export const app = $state<{ fleet: Fleet | null; failed: boolean; route: string[
   route: [],
 });
 
-const refresh = async () => {
+export const refresh = async () => {
   try {
     app.fleet = await load();
     app.failed = false;

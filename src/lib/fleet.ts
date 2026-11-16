@@ -8,7 +8,8 @@ export type Config = {
   backupTimer: string;
   /** Prometheus metric for site checks: 1 when up, labelled by `name` */
   checks: string;
-  hosts: Record<string, { kind: Kind; links: Link[] }>;
+  /** `power`: `POST power/<host>/on` and `power/<host>/off` turn the host on and off */
+  hosts: Record<string, { kind: Kind; links: Link[]; power?: boolean }>;
   sites: { title: string; description?: string; url: string; on?: string }[];
   public: { name: string; on?: string }[];
 };
@@ -45,6 +46,8 @@ export type Host = {
   online: boolean;
   /** always-on host that is offline */
   down: boolean;
+  /** can be turned on and off from here */
+  power: boolean;
   seen?: number;
   booted?: number;
   backup?: number;
@@ -189,6 +192,7 @@ export const load = async (): Promise<Fleet> => {
         alwaysOn,
         online,
         down,
+        power: config.hosts[name].power ?? false,
         seen: lastSeen.get(name),
         booted: lastBoot.get(name),
         backup: lastBackup.get(name),

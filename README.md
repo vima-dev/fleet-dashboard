@@ -1,13 +1,15 @@
 # fleet-dashboard
 
 A status page for a fleet of NixOS hosts: which are up, what is wrong, which
-commit each runs, and the sites they serve. It builds to static files and loads
-its data from three relative paths:
+commit each runs, and the sites they serve. It builds to static files and uses
+these relative paths:
 
 - `config.json`: hosts, sites and a few setup-specific names. See `Config` in
   `src/lib/fleet.ts`.
 - `commits.json`: commits of the fleet's flake, newest first, as
   `{ rev, time, author, subject }`.
+- `power/<host>/on` and `power/<host>/off`: for hosts with `power` in
+  `config.json`, a `POST` turns the host on or off.
 - `api/v1/`: the Prometheus HTTP API. Queries are in `src/lib/fleet.ts`. One
   needs `--enable-feature=promql-experimental-functions`.
 

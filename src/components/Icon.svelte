@@ -12,6 +12,7 @@
     out: "M9 5H5v14h14v-4M13 5h6v6M19 5l-8 8",
     server: "M4 5h16v6H4zM4 13h16v6H4zM8 8h.01M8 16h.01",
     desktop: "M3 5h18v11H3zM9 20h6M12 16v4",
+    power: "M12 4v8M7.5 7a7 7 0 1 0 9 0",
     laptop: "M5 6h14v9H5zM2.5 18.5h19",
   };
   export type IconName = keyof typeof paths;
